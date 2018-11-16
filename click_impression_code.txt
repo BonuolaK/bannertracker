@@ -1,0 +1,7 @@
+<div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://bannertrack.optedia.com/js/code.js"></script>
+<a href="passed_url"><img name='image'  onload="recordLoad('passed_id')" src="passed_src"  /></a>
+</div>
+

@@ -1,0 +1,476 @@
+﻿<%@ Master Language="VB" AutoEventWireup="true" CodeFile="Site.master.vb" Inherits="SiteMaster" %>
+
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
+
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head> 
+  
+  <meta charset="utf-8" />
+  <title>ServeMagic</title>
+     <asp:PlaceHolder ID="PlaceHolder1" runat="server">    
+        <%: Scripts.Render("~/bundles/modernizr") %>
+    </asp:PlaceHolder>
+    <%--<webopt:BundleReference ID="BundleReference1" runat="server" Path="~/Content/css" />--%> 
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+  <meta name="description" content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /> 
+  <link rel="stylesheet" href="css/bootstrap.css" type="text/css" />
+  <link rel="stylesheet" href="css/animate.css" type="text/css" />
+  <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css" />
+  <link rel="stylesheet" href="css/icon.css" type="text/css" />
+  <link rel="stylesheet" href="css/font.css" type="text/css" />
+  <link rel="stylesheet" href="css/app.css" type="text/css" />  
+     <link rel="stylesheet" href="js/datepicker/datepicker.css" type="text/css" />
+    <link rel="stylesheet" href="js/slider/slider.css" type="text/css" />
+<link rel="stylesheet" href="js/chosen/chosen.css" type="text/css" />
+<link rel="stylesheet" href="js/spinner/jquery.bootstrap-touchspin.css" type="text/css" />
+<link rel="stylesheet" href="js/typehead/typehead.css" type="text/css" />
+    <link href="js/datatables/datatables.css" rel="stylesheet" />
+    <link href="css/custom.css" rel="stylesheet" />
+    <!--[if lt IE 9]>
+    <script src="js/ie/html5shiv.js"></script>
+    <script src="js/ie/respond.min.js"></script>
+    <script src="js/ie/excanvas.js"></script>
+  <![endif]-->
+     <script>
+         
+         function UpdateStatus(obj) {
+
+             var notifyid = $(obj).find("span.notid").text();
+             var campid = $(obj).find("span.campid").text();
+             var notify2 = new Banner.Service();
+             notify2.Notify(notifyid, OnComplete, OnError);
+
+         }
+
+         function OnComplete(result) {
+             var nextUrl = location.protocol + "//" + location.host + "/Approval.aspx?ID=" + result;
+             window.open(nextUrl, '_self');
+
+         }
+         function OnError(result) {
+             alert(result.get_message());
+
+         }
+        
+    </script>
+</head>
+<body class="" >
+     <form id="Form1"  style="height:100%" runat="server" enctype="multipart/form-data">
+  <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true" >
+      <Services>
+<asp:ServiceReference Path="~/Service.svc" />
+          
+</Services>
+        <Scripts>
+            <%--To learn more about bundling scripts in ScriptManager see http://go.microsoft.com/fwlink/?LinkID=272931&clcid=0x409 --%>
+            <%--Framework scripts--%>
+            <asp:ScriptReference Name="MsAjaxBundle" />
+            <asp:ScriptReference Name="jquery" />
+            <asp:ScriptReference Name="jquery.ui.combined" />
+            <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
+            <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
+            <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
+            <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
+            <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
+            <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
+            <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
+            <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
+            <asp:ScriptReference Name="WebFormsBundle" />
+            <%--Site scripts--%>
+        </Scripts>
+       </asp:ScriptManager>
+  <section class="vbox">
+    <header class="bg-primary header header-md navbar navbar-fixed-top-xs box-shadow">
+      <div class="navbar-header aside-md dk">
+        <a class="btn btn-link visible-xs"  data-toggle="class:nav-off-screen,open" data-target="#nav,html">
+          <i class="fa fa-bars"></i>
+        </a>
+        <a href="Overview.aspx" class="navbar-brand">
+         
+          <span style="padding-left:15px;font-size:30px" class="headerk hidden-nav-xs">ServeMagic</span>
+        </a>
+        <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".user">
+          <i class="fa fa-cog"></i>
+        </a>
+      </div>
+        <div style="font-size:20px;padding:15px 15px;float:left">
+        <span id="spancompany" runat="server" class=" font-bold"  ></span>
+            </div>
+     <%-- <ul class="nav navbar-nav hidden-xs">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="i i-grid"></i>
+          </a>
+          <section class="dropdown-menu aside-lg bg-white on animated fadeInLeft">
+            <div class="row m-l-none m-r-none m-t m-b text-center">
+              <div class="col-xs-4">
+                <div class="padder-v">
+                  <a href="#">
+                    <span class="m-b-xs block">
+                      <i class="i i-mail i-2x text-primary-lt"></i>
+                    </span>
+                    <small class="text-muted">Mailbox</small>
+                  </a>
+                </div>
+              </div>
+              <div class="col-xs-4">
+                <div class="padder-v">
+                  <a href="#">
+                    <span class="m-b-xs block">
+                      <i class="i i-calendar i-2x text-danger-lt"></i>
+                    </span>
+                    <small class="text-muted">Calendar</small>
+                  </a>
+                </div>
+              </div>
+              <div class="col-xs-4">
+                <div class="padder-v">
+                  <a href="#">
+                    <span class="m-b-xs block">
+                      <i class="i i-map i-2x text-success-lt"></i>
+                    </span>
+                    <small class="text-muted">Map</small>
+                  </a>
+                </div>
+              </div>
+              <div class="col-xs-4">
+                <div class="padder-v">
+                  <a href="#">
+                    <span class="m-b-xs block">
+                      <i class="i i-paperplane i-2x text-info-lt"></i>
+                    </span>
+                    <small class="text-muted">Trainning</small>
+                  </a>
+                </div>
+              </div>
+              <div class="col-xs-4">
+                <div class="padder-v">
+                  <a href="#">
+                    <span class="m-b-xs block">
+                      <i class="i i-images i-2x text-muted"></i>
+                    </span>
+                    <small class="text-muted">Photos</small>
+                  </a>
+                </div>
+              </div>
+              <div class="col-xs-4">
+                <div class="padder-v">
+                  <a href="#">
+                    <span class="m-b-xs block">
+                      <i class="i i-clock i-2x text-warning-lter"></i>
+                    </span>
+                    <small class="text-muted">Timeline</small>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+        </li>
+      </ul>--%>
+   <%--   <form class="navbar-form navbar-left input-s-lg m-t m-l-n-xs hidden-xs" role="search">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-btn">
+              <button type="submit" class="btn btn-sm bg-white b-white btn-icon"><i class="fa fa-search"></i></button>
+            </span>
+            <input type="text" class="form-control input-sm no-border" placeholder="Search apps, projects...">            
+          </div>
+        </div>
+      </form>--%>
+      <ul class="nav navbar-nav navbar-right m-n hidden-xs nav-user user">
+        <li class="hidden-xs">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                    <ContentTemplate>
+            <i class="i i-chat3"></i>
+              
+            <span id="SpanNotify" runat="server" style="display: inline-block;" class="badge badge-sm up bg-danger count"></span>  
+                      </ContentTemplate>
+                    <Triggers>
+                      <asp:AsyncPostBackTrigger  ControlID="Timer1" />
+                  </Triggers>
+                  </asp:UpdatePanel>
+          </a>
+          <section class="dropdown-menu aside-xl animated flipInY">
+              
+            <section class="panel bg-white">
+                <asp:UpdatePanel ID="UpdatePanel2" runat="server">
+                    <ContentTemplate>
+              <div class="panel-heading b-light bg-light">
+
+                <strong>You have <span id="SpanNotifyCount" style="display: inline; " runat="server"  class="count"></span> notifications</strong>
+              </div>
+              <div id="divmessage" style="height:400px;overflow:auto" runat="server" class="list-group list-group-alt">
+               
+               </div>
+                </ContentTemplate>
+                    <Triggers>
+                      <asp:AsyncPostBackTrigger  ControlID="Timer1" />
+                  </Triggers>
+                  </asp:UpdatePanel>
+               
+              <div class="panel-footer text-sm">
+                <a href="#" class="pull-right"><i class="fa fa-cog"></i></a>
+                <a href="#notes" data-toggle="class:show animated fadeInRight">See all the notifications</a>
+              </div>
+                        
+            </section>
+                  
+          </section>
+              
+        </li>
+          
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+           <%-- <span class="thumb-sm avatar pull-left">
+              <img src="images/a0.png" alt="...">
+            </span>--%>
+            <span id="spanusername" runat="server"> </span> <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu animated fadeInRight">            
+           <%-- <li>
+              <span class="arrow top"></span>
+              <a href="#">Settings</a>
+            </li>--%>
+            <li>
+              <a href="profile.html">Profile</a>
+            </li>
+            <li>
+              <a href="#">
+                 <asp:UpdatePanel ID="UpdatePanel3" runat="server">
+                    <ContentTemplate>
+                <span id="spancount2" runat="server" class="badge bg-danger pull-right"></span>
+                       </ContentTemplate>
+                    <Triggers>
+                      <asp:AsyncPostBackTrigger  ControlID="Timer1" />
+                  </Triggers>
+                  </asp:UpdatePanel> 
+                Notifications
+              </a>
+            </li>
+            <li>
+              <a  href="docs.html">Help</a>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a href="LoginPage.aspx" >Logout</a>
+            </li>
+          </ul>
+        </li>
+      </ul>      
+    </header>
+    <section>
+      <section class="hbox stretch">
+        <!-- .aside -->
+        <aside class="bg-light lt b-r b-light aside-md hidden-print hidden-xs" id="nav">          
+          <section class="vbox">
+           <section class="w-f scrollable">
+
+              <div class="slim-scroll" data-height="auto" data-disable-fade-out="true" data-distance="0" data-size="10px" data-railOpacity="0.2">
+                <div class="clearfix wrapper dk nav-user hidden-xs">
+                  <div class="dropdown">
+                   
+                      <span class="thumb avatar pull-left m-r">                        
+                        <img src="images/th.jpg" class="dker" alt="...">
+                        <i class="on md b-black"></i>
+                      </span>
+                      <span class="hidden-nav-xs clear">
+                        <span class="block m-t-xs">
+                          <strong id="strongusername" runat="server" class="font-bold text-lt"></strong> 
+                          
+                        </span>
+                        <span id="spanrole" runat="server" class="text-muted text-xs block"></span>
+                      </span>
+                   
+                    
+                  </div>
+                </div>                
+
+
+                <!-- nav -->                 
+                <nav  class="nav-primary hidden-xs">
+                  <div class="text-muted text-sm hidden-nav-xs padder m-t-sm m-b-sm">Start</div>
+                  <ul class="nav nav-main" data-ride="collapse">
+                       <li >
+                      <a href="Dashboard.aspx" class="auto">
+                        <i class="fa fa-dashboard icon">
+                        </i>
+                        <span class="font-bold">Dashboard</span>
+                      </a>
+                    </li>
+                    <li >
+                      <a href="Overview.aspx" class="auto">
+                        <i class="i i-statistics icon">
+                        </i>
+                        <span class="font-bold">Overview</span>
+                      </a>
+                    </li>
+                    <li id="limanagement" runat="server" visible="false" >
+                      <a href="#" class="auto">
+                        <span class="pull-right text-muted">
+                          <i class="i i-circle-sm-o text"></i>
+                          <i class="i i-circle-sm text-active"></i>
+                        </span>
+                       <%-- <b class="badge bg-danger pull-right">4</b>--%>
+                        <i class="fa fa-users icon">
+                        </i>
+                        <span class="font-bold">Management</span>
+                      </a>
+                      <ul class="nav dk">
+                           <li id="liNativeCompany" runat="server" visible="false" >
+                          <a href="CreateCompany.aspx" class="auto">                                                        
+                            <i class="i i-dot"></i>
+
+                            <span>Create Company</span>
+                          </a>
+                        </li>
+                        <li id="liCompany" runat="server" visible="false" >
+                          <a href="CreateCompany.aspx" class="auto">                                                        
+                            <i class="i i-dot"></i>
+
+                            <span>Client/Publisher Management</span>
+                          </a>
+                        </li>
+                           <li id="liuser" runat="server" visible="false" >
+                          <a href="CreateUser.aspx" class="auto">                                                        
+                            <i class="i i-dot"></i>
+
+                            <span>Agency User Management</span>
+                          </a>
+                        </li>
+                        <li id="librand" runat="server" visible="false" >
+                          <a href="Brand.aspx" class="auto">                                                        
+                            <i class="i i-dot"></i>
+
+                            <span>Brand Management</span>
+                          </a>
+                        </li>                      
+                      </ul>
+                    </li>
+                    <li id="licampaign" runat="server" visible="false" >
+                      <a href="#" class="auto">
+                        <span class="pull-right text-muted">
+                          <i class="i i-circle-sm-o text"></i>
+                          <i class="i i-circle-sm text-active"></i>
+                        </span>
+                        <i class="fa fa-tasks icon">
+                        </i>
+                        <span class="font-bold">Campaign Management</span>
+                      </a>
+                       <ul class="nav dk">
+                           
+                        <li >
+                          <a href="CreateCampaign.aspx" class="auto">                                                        
+                            <i class="i i-dot"></i>
+
+                            <span>Create Campaign</span>
+                          </a>
+                        </li>
+                        
+                      
+                      </ul>
+                    </li>
+                    <li >
+                      <a href="Reports.aspx" class="auto">
+                        <span class="pull-right text-muted">
+                          <i class="i i-circle-sm-o text"></i>
+                          <i class="i i-circle-sm text-active"></i>
+                        </span>
+                        <i class="i i-stats icon">
+                        </i>
+                        <span class="font-bold">Reports</span>
+                      </a>
+                      
+                    </li>
+                   
+                  </ul>
+                   
+                  <div class="line dk hidden-nav-xs"></div>
+               
+                 
+                </nav>
+                <!-- / nav -->
+              </div>
+            </section>
+            
+            <footer class="footer hidden-xs no-padder text-center-nav-xs">
+              <a href="modal.lockme.html" data-toggle="ajaxModal" class="btn btn-icon icon-muted btn-inactive pull-right m-l-xs m-r-xs hidden-nav-xs">
+                <i class="i i-logout"></i>
+              </a>
+              <a href="#nav" id="maximize" data-toggle="class:nav-xs" class="btn btn-icon icon-muted btn-inactive m-l-xs m-r-xs">
+                <i class="i i-circleleft text"></i>
+                <i class="i i-circleright text-active"></i>
+              </a>
+            </footer>
+          </section>
+        </aside>
+        <!-- /.aside -->
+        <section id="content">
+          <section class="vbox">          
+            <section class="scrollable wrapper">
+            
+   
+                   <div id="body">
+                        <asp:Timer ID="Timer1" OnTick="Timer1_Tick" runat="server" Interval="30000">
+            </asp:Timer>
+
+        <asp:ContentPlaceHolder runat="server" ID="FeaturedContent" />
+        <section class="content-wrapper main-content clear-fix">
+            <asp:ContentPlaceHolder runat="server" ID="MainContent" />
+        </section>
+    </div>
+                
+            </section>
+          </section>
+          <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a>
+        </section>
+      </section>
+    </section>
+  </section>
+   
+  <script src="js/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="js/bootstrap.js"></script>
+  <!-- App -->
+  <script src="js/app.js"></script>  
+  <script src="js/slimscroll/jquery.slimscroll.min.js"></script>
+   <script src="js/parsley/parsley.min.js"></script>
+<script src="js/parsley/parsley.extend.js"></script>
+     <script src="js/datepicker/bootstrap-datepicker.js"></script>
+  <!-- slider -->
+  <script src="js/slider/bootstrap-slider.js"></script>
+  <!-- file input -->  
+  <script src="js/file-input/bootstrap-filestyle.min.js"></script>
+  <!-- wysiwyg -->
+  <script src="js/wysiwyg/jquery.hotkeys.js"></script>
+  <script src="js/wysiwyg/bootstrap-wysiwyg.js"></script>
+  <script src="js/wysiwyg/demo.js"></script>
+  <!-- markdown -->
+  <script src="js/markdown/epiceditor.min.js"></script>
+  <script src="js/markdown/demo.js"></script>
+         <script src="js/nivo-lightbox.min.js"></script>
+     <script src="js/chosen/chosen.jquery.min.js"></script>
+  <script src="js/spinner/jquery.bootstrap-touchspin.min.js"></script>
+  <script src="js/typehead/typeahead.bundle.min.js"></script>
+  <script src="js/typehead/demo.js"></script>
+          <script src="js/charts/flot/jquery.flot.min.js"></script>
+         <script src="js/charts/flot/jquery.flot.time.js"></script>
+  <script src="js/charts/flot/jquery.flot.tooltip.min.js"></script>
+  <script src="js/charts/flot/jquery.flot.resize.js"></script>
+  <script src="js/charts/flot/jquery.flot.orderBars.js"></script>
+  <script src="js/charts/flot/jquery.flot.pie.min.js"></script>
+  <script src="js/charts/flot/jquery.flot.grow.js"></script>
+  <script src="js/charts/flot/demo.js"></script>
+         <script src="js/datatables/jquery.dataTables.min.js"></script>
+  <script src="js/app.plugin.js"></script>
+         <script src="js/jquery.validate.min.js"></script>
+         <script src="js/custom.js"></script>
+ </form>
+ 
+
+</body>
+</html>
+

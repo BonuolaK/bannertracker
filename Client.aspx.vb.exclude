@@ -1,0 +1,95 @@
+﻿
+Partial Class Client
+    Inherits System.Web.UI.Page
+
+    Private Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        gvClient.DataSource = DAL.SelectClient(Session("COMPANYID"))
+        gvClient.DataBind()
+    End Sub
+    Protected Sub gvClient_RowCommand(ByVal sender As Object, ByVal e As System.Web.UI.WebControls.GridViewCommandEventArgs) Handles gvClient.RowCommand
+        
+        clear()
+        Try
+            Dim Userid As Integer
+            Dim dr As String() = Nothing
+            Dim e_ As Integer = e.CommandArgument()
+            Dim rowe = gvClient.Rows(e_)
+            If CType(e.CommandSource, LinkButton).ID = "imgDelete" Then
+                Dim label As Control = TryCast(gvClient.Rows(rowe.RowIndex).FindControl("LblID"), Label)
+                Dim lbl As Label = DirectCast(label, Label)
+
+                Userid = lbl.Text
+                DAL.DeleteClient(Userid)
+                gvClient.DataSource = DAL.SelectClient(Session("COMPANYID"))
+                gvClient.DataBind()
+            ElseIf CType(e.CommandSource, LinkButton).ID = "btnEdit" Then
+                Dim label As Control = TryCast(gvClient.Rows(rowe.RowIndex).FindControl("LblID"), Label)
+                Dim lbl As Label = DirectCast(label, Label)
+
+                Userid = lbl.Text
+                dr = DAL.SelectClientbyID(Userid)
+                If dr IsNot Nothing Then
+                    TxtName.Text = dr(1)
+                    LblClientID.Text = Userid
+                End If
+
+            End If
+
+        Catch ex As Exception
+
+        End Try
+
+    End Sub
+    Protected Sub BtnSubmit_Click(sender As Object, e As EventArgs) Handles BtnSubmit.Click
+        Try
+            divsuccess.Attributes("class") = "alert alert-danger"
+            divsuccess.Style.Add("display", "none")
+            errormsg.InnerHtml = ""
+            If TxtName.Text <> "" Then
+
+                Dim msg As String = DAL.InsertClient(LblClientID.Text, TxtName.Text)
+                If msg <> 0 Then
+                    gvClient.DataSource = DAL.SelectClient(Session("COMPANYID"))
+                    gvClient.DataBind()
+                    divsuccess.Attributes("class") = "alert alert-success"
+                    divsuccess.Style.Add("display", "block")
+                    If LblClientID.Text = "0" Then
+                        errormsg.InnerHtml = "<strong>Success!</strong> Client was successfully added."
+                    Else
+                        errormsg.InnerHtml = "<strong>Success!</strong> Client was successfully updated."
+                    End If
+
+                    TxtName.Text = ""
+                    LblClientID.Text = "0"
+
+                Else
+                    divsuccess.Attributes("class") = "alert alert-danger"
+                    divsuccess.Style.Add("display", "block")
+                    errormsg.InnerHtml = "<strong>Error!</strong> Error Encountered, please try again."
+                    LblClientID.Text = "0"
+                    TxtName.Text = ""
+                End If
+            Else
+                divsuccess.Attributes("class") = "alert alert-danger"
+                divsuccess.Style.Add("display", "block")
+                errormsg.InnerHtml = "<strong>Error!</strong> Please fill in a client name."
+                LblClientID.Text = "0"
+            End If
+        Catch ex As Exception
+            divsuccess.Attributes("class") = "alert alert-danger"
+            divsuccess.Style.Add("display", "block")
+            errormsg.InnerHtml = "<strong>Error!</strong> Error Encountered, please try again."
+            LblClientID.Text = "0"
+            TxtName.Text = ""
+        End Try
+       
+    End Sub
+    Private Sub clear()
+        TxtName.Text = ""
+        LblClientID.Text = "0"
+        divsuccess.Attributes("class") = "alert alert-danger"
+        divsuccess.Style.Add("display", "none")
+        errormsg.InnerHtml = ""
+    End Sub
+
+End Class
